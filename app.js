@@ -6,18 +6,36 @@ var express = require('express');
 var routes = require('./routes');
 var http = require('http');
 var path = require('path');
+var less_middleware = require('less-middleware');
 
 var app = express();
 
 app.configure(function(){
-  app.set('port', process.env.PORT || 5000);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
+  app.set( 'port', process.env.PORT || 5000 );
+  app.set( 'views', __dirname + '/views' );
+  app.set( 'view engine', 'jade');
+  app.use( express.favicon() );
+  app.use( express.logger('dev') );
+  app.use( express.bodyParser() );
+  app.use( express.methodOverride() );
+  // app.use( less_middleware({ 
+  //   src: __dirname + '/public/less', 
+  //   dest: __dirname + '/public/css',
+  //   // root: __dirname + '/public',
+  //   prefix:'/css',
+  //   force: true,
+  //   debug: true
+  // }) );
+
+  app.use( less_middleware({ 
+    src: __dirname + '/public-src/less', 
+    dest: __dirname + '/public/css',
+    prefix:'/css',
+    force: true,
+    debug: true
+  }) );
+  app.use( express.static(__dirname + '/public') );
+  app.use( app.router );
 });
 
 app.configure('development', function(){
@@ -25,6 +43,7 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index);
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
