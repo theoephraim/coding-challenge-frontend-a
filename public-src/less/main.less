@@ -41,6 +41,9 @@
 ///// Colors
 @logo_yellow: #faae2b;
 @link_color: #0079ae;
+@light_blue: #499fc5;
+@dark_blue: #275597;
+
 
 
 
@@ -49,7 +52,8 @@ html, body {
 	margin: 0;
 	min-height: 300px;
 	background: #EBF0F2;
-	font-size:14px;
+	font-size:16px;
+	-webkit-font-smoothing: antialiased;
 }
 .main-column {
 	max-width: 700px;
@@ -64,7 +68,7 @@ a {
 }
 input { 
 	font-family: "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-weight: normal;
+	font-weight: 100;
 	.border-radius(5px);
 	font-size:16px;
 }
@@ -182,14 +186,44 @@ input {
 			input, &:before { color: #9d261d; }
 		}
 	}
+
+	// Autocomplete styles
+	.twitter-typeahead { display:block !important; }
+	input.city-select, input.tt-hint { 
+		width:100%;
+		z-index:1;
+		display:block;
+		padding-left:35px;
+		padding-right:35px;
+		.box-sizing(border-box);
+
+	}
+	.tt-dropdown-menu {
+		width:100%;
+		background:white;
+		.border-radius(5px);
+		.box-sizing(border-box);
+		border:1px solid rgba(0,0,0,.2);
+		overflow:hidden;
+	}
+	.tt-suggestion {
+		color:#333;
+		padding-left:35px;
+		line-height:30px;
+		font-size:15px;
+		text-shadow:none;
+		&.tt-is-under-cursor {
+			.gradient( #3b81b4, #3573a1 );
+			color:white;
+			.text-shadow(0px -1px 1px rgba(0,0,0,.2));
+		}
+	}
+
 }
 input.city-select {
-	width:100%;
-	z-index:1;
-	display:block;
+	
 	margin-bottom:1em;
-	border:1px solid #aaa;
-	border-color:rgba(0,0,0,.2);
+	border:1px solid rgba(0,0,0,.2);
 	background:#f2f2f2;
 	.transition( all .5s );
 	padding-left:35px;
@@ -219,7 +253,7 @@ label#search {
 		cursor:pointer;
 		width:100%;
 		color:white;
-		.gradient( #4e9ab9, #3e758d );
+		.gradient-darken( #4e9ab9, .4 );
 		border:1px solid #3a6986;
 		text-indent:-9999px;
 		.box-shadow( 
@@ -250,7 +284,7 @@ label#search {
 	}
 	&:hover {
 		input {
-			.gradient( darken(#4e9ab9, 4%), darken(#3e758d, 4%) );	
+			background-color: darken( #4e9ab9, 5% );
 		}
 		&:before {
 			.scale(1.1, 1.1);
