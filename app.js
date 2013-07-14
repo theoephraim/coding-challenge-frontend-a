@@ -18,21 +18,11 @@ app.configure(function(){
   app.use( express.logger('dev') );
   app.use( express.bodyParser() );
   app.use( express.methodOverride() );
-  // app.use( less_middleware({ 
-  //   src: __dirname + '/public/less', 
-  //   dest: __dirname + '/public/css',
-  //   // root: __dirname + '/public',
-  //   prefix:'/css',
-  //   force: true,
-  //   debug: true
-  // }) );
-
   app.use( less_middleware({ 
     src: __dirname + '/public-src/less', 
     dest: __dirname + '/public/css',
     prefix:'/css',
-    force: true,
-    debug: true
+    force: true
   }) );
   app.use( express.static(__dirname + '/public') );
   app.use( app.router );

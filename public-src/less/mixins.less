@@ -1,0 +1,248 @@
+.clearfix {
+  *zoom: 1;
+  &:before,
+  &:after {
+	display: table;
+	content: "";
+	// Fixes Opera/contenteditable bug:
+	// http://nicolasgallagher.com/micro-clearfix-hack/#comment-36952
+	line-height: 0;
+  }
+  &:after {
+	clear: both;
+  }
+}
+
+.opacity( @level ){
+	@level100 : @level * 100;
+	opacity: @level; /* CSS 3 for all recent browsers except IEs */
+	-moz-opacity: @level; /* older Mozilla versions like Netscape */
+	-khtml-opacity: @level; /* older Safari versions */
+	-ms-filter:~"progid:DXImageTransform.Microsoft.Alpha(Opacity=@{level100})"; /* Pure IE8 */
+	filter:alpha(opacity=@level100); /* IE5 to IE7 and IE8 as IE7 */
+}
+
+.transform(...) {
+  -webkit-transform: @arguments;
+  -moz-transform: @arguments;
+  -o-transform: @arguments;
+  -ms-transform: @arguments;
+  transform: @arguments;
+}
+
+.transform-origin (...) {
+	-webkit-transform-origin: @arguments;
+	-moz-transform-origin:    @arguments;
+	-ms-transform-origin:     @arguments;
+	-o-transform-origin:      @arguments;
+	transform-origin:         @arguments;
+}
+.translate3d(@x, @y, @z){
+	.transform( translate3d(@x,@y,@z) );
+}
+.rotate( @angle_deg: 90deg ){
+	.transform(rotate(@angle_deg));
+}
+.scale( @x, @y ){
+	.transform(scale( @x, @y ));
+}
+
+.border-radius(...) {
+	border-radius: @arguments;
+	-moz-border-radius: @arguments;
+	-webkit-border-radius: @arguments;
+	-moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
+}
+
+.box-shadow(@shadow1,@shadow2:X,...){
+	@value: ~`"@{arguments}".replace(/[\[\]]|\,\sX/g, '')`;
+	box-shadow: @shadow1; // In case some browsers support only one shadow
+	box-shadow: @value;
+	-webkit-box-shadow: @value;
+	-moz-box-shadow: @value;
+	-khtml-box-shadow: @value;
+}
+//just for consistency with box shadow
+.text-shadow(@value1,@value2:X,...){
+	@value: ~`"@{arguments}".replace(/[\[\]]|\,\sX/g, '')`;
+	text-shadow:@value;
+}
+.transition (@value1,@value2:X,...){
+	@value: ~`"@{arguments}".replace(/[\[\]]|\,\sX/g, '')`;
+	-webkit-transition: @value;
+	-moz-transition: @value;
+	-ms-transition: @value;
+	-o-transition: @value;
+	transition: @value;
+}
+
+.gradient(@start: #EEE, @stop: #FFF) { // vertical 2-color gradient
+	background-color: mix( @start, @stop, 50%);
+	background: -webkit-gradient(linear,
+								 left bottom,
+								 left top,
+								 color-stop(0, @start),
+								 color-stop(1, @stop));
+	background: -ms-linear-gradient(bottom,
+									@start,
+									@stop);
+	background: -moz-linear-gradient(center bottom,
+									 @start 0%,
+									 @stop 100%);
+	background: -o-linear-gradient(@start,@stop);
+	background: linear-gradient(@start,@stop);
+	background: -webkit-linear-gradient(@start,@stop);
+//	filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr=#50FFFFFF, endColorstr=#,GradientType=0 )";
+}
+
+.hgradient(@startColor: #eee, @endColor: white) {
+	background-color: mix( @startColor, @endColor, 50%);
+	background-image: -webkit-gradient(linear, left top, right top, from(@startColor), to(@endColor));
+	background-image: -webkit-linear-gradient(left, @startColor, @endColor);
+	background-image: -moz-linear-gradient(left, @startColor, @endColor);
+	background-image: -ms-linear-gradient(left, @startColor, @endColor);
+	background-image: -o-linear-gradient(left, @startColor, @endColor);
+}
+
+.placeholder-color( @color ){
+	&::-webkit-input-placeholder { /* WebKit browsers */
+		color:    @color;
+	}
+	&:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+		color:    @color;
+	}
+	&::-moz-placeholder { /* Mozilla Firefox 19+ */
+		color:    @color;
+	}
+	&:-ms-input-placeholder { /* Internet Explorer 10+ */
+		color:    @color;
+	}
+}
+.placeholder-text-transform( @transformation ){
+	&::-webkit-input-placeholder { /* WebKit browsers */
+		text-transform: @transformation;
+	}
+	&:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+		text-transform: @transformation;
+	}
+	&::-moz-placeholder { /* Mozilla Firefox 19+ */
+		text-transform: @transformation;
+	}
+	&:-ms-input-placeholder { /* Internet Explorer 10+ */
+		text-transform: @transformation;
+	}	
+}
+.placeholder-text-shadow( ... ){
+	&::-webkit-input-placeholder { text-shadow: @arguments; }
+	&:-moz-placeholder { text-shadow: @arguments; }
+	&::-moz-placeholder { text-shadow: @arguments; }
+	&:-ms-input-placeholder { text-shadow: @arguments; }
+}
+
+
+.splitshine(@color){
+	background-image: -webkit-gradient(linear, 
+								 left bottom, 
+								 left top, 
+								 color-stop(1, rgba(255,255,255,0.4)),
+								 color-stop(0.51, rgba(255,255,255,0.1)),
+								 color-stop(0.5, rgba(255,255,255,0.0)),
+								 color-stop(0, rgba(255,255,255,0.1)) );
+	background-image: -moz-linear-gradient(top, 
+									  rgba(255,255,255,0.5), 
+									  rgba(255,255,255,0.3) 50%, 
+									  rgba(0,0,0,0.0) 51%, 
+									  rgba(255,255,255,0.2));
+	filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr=#50FFFFFF, endColorstr=#20000000,GradientType=0 )";
+}
+.bgfade( @color, @fade ){
+	background-color: fadeout(@color, 100-@fade*100);
+	@rgbahex: ~`function(color, fade){var t = (Math.round(255*fade)).toString(16).toUpperCase();t=t.length==1?'0'+t:t;return '#'+t+color.substr(1)}("@{color}","@{fade}")`;
+	filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr=@{rgbahex}, endColorstr=@{rgbahex},GradientType=0 )";
+}
+.iepngfix(){
+	background: transparent;
+	-ms-filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)"; /* IE8 */   
+	filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)";   /* IE6 & 7 */      
+	zoom: 1;
+}
+.background-size( @arguments ){
+	-webkit-background-size: @arguments;
+	-moz-background-size: @arguments;
+	background-size: @arguments;
+}
+.spin( @duration ) {
+	.animation( rotation @duration infinite linear );
+}
+
+@-webkit-keyframes rotation {
+	from {-webkit-transform: rotate(0deg);}
+	to   {-webkit-transform: rotate(359deg);}
+}
+
+.backface-hidden {
+	backface-visibility:hidden;
+	-webkit-backface-visibility:hidden;
+	-moz-backface-visibility:hidden;
+	-ms-backface-visibility:hidden;
+}
+
+.animation (...){
+	-webkit-animation: @arguments;
+	animation: @arguments;
+}
+
+.box-sizing (@type: border-box) {
+	-webkit-box-sizing: @type;
+	-moz-box-sizing:    @type;
+	box-sizing:         @type;
+}
+
+/* Base Reset */
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}

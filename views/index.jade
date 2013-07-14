@@ -17,14 +17,15 @@ html.en(lang='en')
         .hero-unit
           .main-column
             .search-form
-              strong.slogan
-                | Serving bus schedules for 
-                a(href="http://google.com") 4379 cities
-                |  in 
-                a(href="http://google.com") 66 countries
+              strong.slogan.
+                Serving bus schedules for 
+                <a href="/city-list">4379 cities</a> in <a href="/country-list">66 countries</a>.
               h1 Find a bus for your next trip.
               form
-                input#city-from.city-select
-                input#city-to.city-select
-                input(type="submit", value="Search")
+                label#city-from.city
+                  input.city-select(name="city_from",autocomplete="off",placeholder="From")
+                label#city-to.city
+                  input.city-select(name="city_to",autocomplete="off",placeholder="To")
+                label#search
+                  input(type="submit", value="Search")
               
