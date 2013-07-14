@@ -925,6 +925,7 @@
                     hint = this.inputView.getHintValue();
                     inputValue = this.inputView.getInputValue();
                     preventDefault = hint && hint !== inputValue;
+                    console.log( 'PREVENT = ' + preventDefault );
                     break;
 
                   case "upKeyed":
