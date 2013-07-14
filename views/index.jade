@@ -5,7 +5,7 @@ html.en(lang='en')
     link(rel='stylesheet',href='/css/main.css')
     script(src='http://use.typekit.net/pdu4jrt.js')
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
-    script(src='/js/typeahead.min.js')
+    script(src='/js/typeahead.js')
     script(src='/js/main.js')
   body#b
     .header
@@ -22,11 +22,14 @@ html.en(lang='en')
                 Serving bus schedules for 
                 <a href="/city-list">4379 cities</a> in <a href="/country-list">66 countries</a>.
               h1 Find a bus for your next trip.
-              form
+              form(action=".",method="GET")
+                input(type="hidden",name="from_norm",id="from_norm")
+                input(type="hidden",name="to_norm",id="to_norm")
                 label#city-from.city
-                  input.city-select(name="city_from",autocomplete="off",placeholder="From")
+                  input.city-select(name="from",autocomplete="off",placeholder="From")
                 label#city-to.city
-                  input.city-select(name="city_to",autocomplete="off",placeholder="To")
+                  input.city-select(name="to",autocomplete="off",placeholder="To")
                 label#search
                   input(type="submit", value="Search")
-              
+              .error-container
+                | One or both of your selections is invalid. Please try again.
