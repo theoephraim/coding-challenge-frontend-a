@@ -1,6 +1,8 @@
 try{ Typekit.load(); } catch(e){}
 $(document).ready(function(){
 	BusbudSearchForm.init();
+	//unfortunately we need a hacky fix for iconfonts in IE8
+	if ( $('html').hasClass('lt-ie9') ) fixIconFontsIe8();
 });
 
 
@@ -31,10 +33,10 @@ var BusbudSearchForm = new function(){
 		valid = form_inputs[0].checkIsValidSelection( show_required_errors ) && valid;
 		valid = form_inputs[1].checkIsValidSelection( show_required_errors ) && valid;
 		if ( valid ) {
-			$('.error-container').fadeOut();
+			$('.error-message').fadeOut();
 			return true;
 		} else {
-			if ( show_form_error) $('.error-container').fadeIn();
+			if ( show_form_error) $('.error-message').fadeIn();
 			return false;
 		}
 	}
@@ -50,6 +52,8 @@ function BusbudCityDropdown( input ){
 	var $input = $(input);
 	var $normalized_input = $( '#' + $input.attr('name') + '_norm' );
 	var $parent_label = $input.parents('label');
+	var placeholder_text = $input.attr('placeholder').toUpperCase();
+	$input.removeAttr('placeholder');
 
 	// initialize
 	$(input).typeahead([{
@@ -66,7 +70,12 @@ function BusbudCityDropdown( input ){
 		BusbudSearchForm.validateForm();
 	}).on('blur', function(){
 		self.checkIsValidSelection();
+	}).on('focus', function(){
+		// need to clear it beacuse typeahead compares the hint with the input to determine if it should block default tab behavior
+		clearHintPlaceholder();
 	})
+	// we do this instead of relying on html5 placeholders so we dont need to do anything special for old browsers
+	setHintAsPlaceholder();
 
 
 	// public functions
@@ -79,6 +88,7 @@ function BusbudCityDropdown( input ){
 		if ( $input.val() == '' ){
 			$normalized_input.val('');
 			$parent_label.removeClass('good');
+			setHintAsPlaceholder();
 			if ( empty_is_error ) $parent_label.addClass('error');
 			return false;
 		// user didnt select a city or manually edited the input
@@ -86,12 +96,20 @@ function BusbudCityDropdown( input ){
 			$normalized_input.val('');
 			$parent_label.removeClass('good').addClass('error');
 			return false;
-		// user manually typed back in the same letters as last selection
+		// user selected a city OR manually typed back in the same letters as last selection
 		} else if ( selected_city && $input.val() == selected_city.value ){
 			$normalized_input.val( selected_city.norm );
 			$parent_label.addClass('good').removeClass('error');
 			return true;
 		}
+	}
+
+	//private functions
+	function setHintAsPlaceholder(){
+		$parent_label.find('.tt-hint').val( placeholder_text );
+	}
+	function clearHintPlaceholder(){
+		$parent_label.find('.tt-hint').val( '' );
 	}
 
 	// used by typeahead to convert API data into proper format
@@ -101,5 +119,17 @@ function BusbudCityDropdown( input ){
 		}
 		return cities;
 	}
+}
+
+function fixIconFontsIe8(){
+	// see http://stackoverflow.com/questions/9809351/ie8-css-font-face-fonts-only-working-for-before-content-on-over-and-sometimes
+	var head = document.getElementsByTagName('head')[0],
+	    style = document.createElement('style');
+	style.type = 'text/css';
+	style.styleSheet.cssText = ':before,:after {content:none !important';
+	head.appendChild(style);
+	setTimeout(function(){
+	    head.removeChild(style);
+	}, 0);
 }
 

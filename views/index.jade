@@ -1,5 +1,13 @@
 !!! 5
-html.en( lang='en' )
+//if lt IE 7
+    <html class="no-js lt-ie9 lt-ie8 lt-ie7">
+//if IE 7
+    <html class="no-js lt-ie9 lt-ie8">
+//if IE 8
+    <html class="no-js lt-ie9">
+// [if gt IE 8] <!
+html(class="no-js", lang="en")
+    // <![endif]
   head
     title=title
     link( rel='stylesheet',href='/css/main.css' )
@@ -7,7 +15,7 @@ html.en( lang='en' )
     script( src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js' )
     //- Using very slightly modified version of typeahead. Discussing fixes with project maintainers on github.
     script( src='/js/typeahead.js' )
-    script( src='/js/main.js' )
+    script( src='/js/main.js?1' )
   body#b
     .header
       .main-column
@@ -27,10 +35,16 @@ html.en( lang='en' )
                 input( type="hidden", name="from_norm", id="from_norm" )
                 input( type="hidden", name="to_norm", id="to_norm" )
                 label#city-from.city
+                  span.icon.map-marker( data-icon!="&#xe000;" )
+                  span.down-arrow &#x25BC;
                   input.city-select( name="from", tabindex="1", placeholder="From" )
                 label#city-to.city
+                  span.icon.map-marker( data-icon!="&#xe000;" )
+                  span.down-arrow &#x25BC;
                   input.city-select( name="to", tabindex="2", placeholder="To" )
                 label#search
-                  input( type="submit", tabindex="3", value="Search" )
+                  span.icon( data-icon!="&#xe001;" )
+                  input( type="submit", tabindex="3", value="Go" )
               .error-container
-                | One or both of your selections is invalid. Please try again.
+                .error-message
+                  | One or both of your selections is invalid. Please try again.
